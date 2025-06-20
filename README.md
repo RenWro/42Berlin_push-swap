@@ -20,34 +20,45 @@ The goal is to minimize the number of operations.
 
 🧠 Algorithm Used
 
-This implementation is based on the Modified Greedy Algorithm, also known as the Turk strategy:
+This implementation is based on the Radix sort strategy. Radix sort is a non-comparative sorting algorithm that sorts numbers by processing individual bits.
 
-Phase 1: A → B
+It starts with the least significant bit (LSB) and moves toward the most significant bit (MSB).
 
-Calculate the cheapest element in A to move to B using n_moves().
+For each bit position, it separates numbers into two groups: those with a 0 bit and those with a 1 bit at that position.
 
-Use rotation combinations (ra, rb, rr, etc.) to minimize the total moves.
+In push_swap, you use two stacks: a (source) and b (auxiliary).
 
-Push the selected element from A to B.
+While checking each bit, you pb (push to b) if the bit is 0, and ra (rotate a) if the bit is 1.
 
-Phase 2: B → A
+After one full pass, you pa (push back to a) all elements from b.
 
-Reinsert each element from B into the correct position in A using stack_back_to_a().
+This process is repeated for each bit (number of passes depends on the maximum bit length of the numbers).
 
-Final adjustment: rotate A until the smallest value is at the top with deliver_on_top_a().
+The key idea is: sorting by bits ensures the order is preserved from lower bits to higher bits.
+
+This method works well with normalized indexes (e.g., mapping values 0 to n-1).
+
+It guarantees sorting in O(n * log n) steps using only allowed operations.
 
 🧩 File Structure
 
 .
-├── push_swap.h           # Project header with structs and function prototypes
-├── main.c                # Entry point
-├── algo.c                # Main algorithm logic (recursive sorting)
-├── stacking_a.c          # Moves from B to A
-├── stacking_b.c          # Moves from A to B and cost calculations
-├── stacks_utils.c        # Utilities (a_min/max, b_min/max, print)
-├── operations.c          # All push/swap/rotate implementations
-├── parser.c              # Argument handling and input validation
-└── libft/                # Standard library (as required by 42)
+.
+├── Makefile                  # Compiles the project; includes rules: all, clean, fclean, re
+├── push_swap_test.sh         # Optional testing script (unofficial)
+├── pro_checker               # Optional performance checker
+├── checker_Mac               # 42-provided checker binary for macOS
+├── checker_linux             # 42-provided checker binary for Linux
+├── includes/
+│   ├── libft/                # Your full libft implementation
+│   └── push_swap.h           # Central header with struct definitions and all function prototypes
+├── sources/
+│   ├── main.c                # Entry point: handles program start and flow control
+│   ├── memory.c              # Handles memory cleanup (e.g. cleanup_and_exit, free_split)
+│   ├── ops.c                 # Core push_swap operations: push, swap, rotate, reverse_rotate
+│   ├── sorts.c               # Contains sorting logic: sort_3, sort_4_5, radix_sort
+│   └── utils.c               # Utility functions: string-to-int conversion, token counting, etc.
+
 
 🛠 Compilation
 
