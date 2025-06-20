@@ -9,7 +9,7 @@ push_swap is a 42 school algorithmic project where the objective is to sort a st
 ![Status](https://img.shields.io/badge/status-working-brightgreen?style=flat-square)
 ![Norminette](https://img.shields.io/badge/norminette-passed-blue?style=flat-square)
 
-📦 Project Overview
+##📦 Project Overview
 
 Given a stack A of integers (unsorted), the program must sort it in ascending order using an auxiliary stack B and only the following operations:
 
@@ -23,7 +23,7 @@ rra, rrb, rrr: reverse rotate (bottom to top)
 
 The goal is to minimize the number of operations.
 
-🧠 Algorithm Used
+##🧠 Algorithm Used
 
 This implementation is based on the Radix sort strategy. Radix sort is a non-comparative sorting algorithm that sorts numbers by processing individual bits.
 
