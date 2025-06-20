@@ -204,6 +204,6 @@ Exploit combined operations (rr, rrr) when directions match.
 
 ## 🧠 Author
 
-👩‍💻 Renata W.  
+👩‍💻 Ren W.  
 Project for [42 School](https://42.fr)
 
