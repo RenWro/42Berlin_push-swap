@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: rwrobles <rwrobles@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/17 12:39:52 by rwrobles          #+#    #+#              #
+#    Created: 2025/04/17 12:39:52 by rwrobles          #+#    #+#              #
 #    Updated: 2025/06/20 15:20:00 by rwrobles         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -22,6 +22,7 @@ RESET	=	\033[0m
 # Compiler and flags
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror
+RM		=	rm -f
 
 # Directories
 SRC_DIR 	= 	sources
@@ -51,7 +52,7 @@ $(LIBFT_A):
 
 $(NAME): $(BUILD_DIR) $(LIBFT_A) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
-	@echo "$(GREEN)$(NAME) built successfully!$(RESET)"
+	@echo "$(GREEN)$(NAME) was successfully built!$(RESET)"
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -60,14 +61,43 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	@$(RM) $(OBJS)
 	@make clean -C $(LIBFT_DIR)
-	@echo "$(GREY)Objects removed$(RESET)"
+	@echo "$(GREY)Object files removed.$(RESET)"
 
 fclean: clean
 	@$(RM) $(NAME)
 	@make fclean -C $(LIBFT_DIR)
 	@rm -rf $(BUILD_DIR)
-	@echo "$(GREY)Executable removed$(RESET)"
+	@echo "$(GREY)Executable removed.$(RESET)"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# Valgrind Targets (Linux-only)
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+	SHUF = shuf
+
+valgrind_100: all
+	@echo "$(MAGENTA)🔢 Generating 100 random numbers...$(RESET)"
+	@ARG=`$(SHUF) -i 1-100 -n 100 | tr '\n' ' '` ; \
+	echo "$(BLUE)🧪 Testing with 100 numbers$(RESET)" ; \
+	valgrind --leak-check=full --track-origins=yes ./$(NAME) $$ARG > output.txt ; \
+	# ./checker_linux $$ARG < output.txt ; \
+	echo "$(GREEN)📊 Move count: `cat output.txt | wc -l`$(RESET)" ; \
+	rm -f output.txt
+
+valgrind_500: all
+	@echo "$(MAGENTA)🔢 Generating 500 random numbers...$(RESET)"
+	@ARG=`$(SHUF) -i 1-500 -n 500 | tr '\n' ' '` ; \
+	echo "$(BLUE)🧪 Testing with 500 numbers$(RESET)" ; \
+	valgrind --leak-check=full --track-origins=yes ./$(NAME) $$ARG > output.txt ; \
+	# ./checker_linux $$ARG < output.txt ; \
+	echo "$(GREEN)📊 Move count: `cat output.txt | wc -l`$(RESET)" ; \
+	rm -f output.txt
+
+valgrind: all
+	@echo "$(MAGENTA)🔍 Running Valgrind...$(RESET)"
+	valgrind --leak-check=full --track-origins=yes ./$(NAME)
+endif
+
+.PHONY: all clean fclean re valgrind valgrind_100 valgrind_500
+
