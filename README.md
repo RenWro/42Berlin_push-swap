@@ -69,7 +69,7 @@ Example:
 ### ✅ Validate with checker
 
 ```bash
-./push_swap 3 2 1 | ./checker_Mac 3 2 1
+./push_swap 3 2 1 | ./checker_linux 3 2 1
 ```
 
 > If the result is sorted and valid, you'll get: `OK`
@@ -200,6 +200,44 @@ Avoid pushing elements to B randomly.
 Always analyze move cost from both A and B simultaneously.
 
 Exploit combined operations (rr, rrr) when directions match.
+
+---
+
+🧪 Valgrind Testing with Random Inputs
+You can test your program with 100 or 500 random integers, and automatically check for memory leaks and instruction count using the following Makefile targets:
+
+- **`bash
+make valgrind_100
+make valgrind_500`**
+
+These targets will:
+
+Compile the project (if not already built)
+
+Generate a random sequence of n unique integers using shuf
+
+Run ./push_swap with this sequence
+
+Pipe the result to valgrind to check for leaks
+
+(Optional) Use checker_linux to validate the result (commented by default)
+
+Count the number of operations performed
+
+Sample output:
+
+- **`🔢 Generating 100 random numbers...`**
+- **`🧪 Testing with 100 numbers`**
+- **`📊 Move count: 654`**
+
+You can tweak these targets in the Makefile if you'd like to adjust ranges, integrate the checker, or run without Valgrind.
+
+🐚 Shell Note (for fish users)
+If you are using the fish shell, remember to set your ARG like this:
+
+- **`fish
+set ARG "3 2 1"
+./push_swap $ARG | ./checker_linux $ARG`**
 
 
 ## 🧠 Author
